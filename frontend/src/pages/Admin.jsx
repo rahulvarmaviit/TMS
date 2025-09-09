@@ -106,19 +106,23 @@ const Admin = () => {
             value={editingUser ? editingUser.email : newUser.email}
             onChange={e => editingUser ? setEditingUser({...editingUser, email: e.target.value}) : setNewUser({...newUser, email: e.target.value})}
           />
-          <TextField
-            label="Password"
-            type="password"
-            value={editingUser ? editingUser.password : newUser.password}
-            onChange={e => editingUser ? setEditingUser({...editingUser, password: e.target.value}) : setNewUser({...newUser, password: e.target.value})}
-          />
+          {!editingUser && (
+            <TextField
+              label="Password"
+              type="password"
+              value={newUser.password}
+              onChange={e => setNewUser({...newUser, password: e.target.value})}
+            />
+          )}
           <Select
             value={editingUser ? editingUser.role : newUser.role}
             onChange={e => editingUser ? setEditingUser({...editingUser, role: e.target.value}) : setNewUser({...newUser, role: e.target.value})}
           >
-            <MenuItem value="admin">Admin</MenuItem>
-            <MenuItem value="hr">HR</MenuItem>
-            <MenuItem value="employee">Employee</MenuItem>
+            <MenuItem value="Admin">Admin</MenuItem>
+            <MenuItem value="HR">HR</MenuItem>
+            <MenuItem value="Employee">Employee</MenuItem>
+            <MenuItem value="Manager">Manager</MenuItem>
+            <MenuItem value="Intern">Intern</MenuItem>
           </Select>
           <Button onClick={editingUser ? handleUpdate : handleCreate}>{editingUser ? 'Update' : 'Create'}</Button>
         </Box>

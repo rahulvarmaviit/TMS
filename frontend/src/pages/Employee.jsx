@@ -21,9 +21,10 @@ const Employee = () => {
   const fetchTasks = async () => {
     try {
       const res = await axios.get('/api/employee/tasks', { headers: { Authorization: `Bearer ${user.token}` } });
-      setTasks(res.data);
+      setTasks(Array.isArray(res.data) ? res.data : []);
     } catch (err) {
       console.error(err);
+      setTasks([]);
     }
   };
 
@@ -58,18 +59,20 @@ const Employee = () => {
   const fetchAttendance = async () => {
     try {
       const res = await axios.get('/api/employee/attendance', { headers: { Authorization: `Bearer ${user.token}` } });
-      setAttendance(res.data);
+      setAttendance(Array.isArray(res.data) ? res.data : []);
     } catch (err) {
       console.error(err);
+      setAttendance([]);
     }
   };
 
   const fetchPerformance = async () => {
     try {
       const res = await axios.get('/api/employee/performance', { headers: { Authorization: `Bearer ${user.token}` } });
-      setPerformance(res.data);
+      setPerformance(Array.isArray(res.data) ? res.data : []);
     } catch (err) {
       console.error(err);
+      setPerformance([]);
     }
   };
 

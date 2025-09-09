@@ -14,21 +14,21 @@ function auth(req, res, next) {
 }
 
 function admin(req, res, next) {
-  if (req.user.role !== 'admin') {
+  if (req.user.role !== 'Admin') {
     return res.status(403).json({ msg: 'Access denied' });
   }
   next();
 }
 
 function hr(req, res, next) {
-  if (req.user.role !== 'hr') {
+  if (req.user.role !== 'HR') {
     return res.status(403).json({ msg: 'Access denied' });
   }
   next();
 }
 
 function employee(req, res, next) {
-  if (req.user.role !== 'employee') {
+  if (req.user.role !== 'Employee') {
     return res.status(403).json({ msg: 'Access denied' });
   }
   next();

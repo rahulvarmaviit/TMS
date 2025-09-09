@@ -4,6 +4,7 @@ import { Menu as MenuIcon, Dashboard as DashboardIcon, People as PeopleIcon, Ass
 import { Outlet, Link } from 'react-router-dom';
 
 const Layout = () => {
+  console.log('Layout component rendered');
   const [open, setOpen] = React.useState(false);
 
   const toggleDrawer = () => {
@@ -43,6 +44,7 @@ const Layout = () => {
         </List>
       </Drawer>
       <main style={{ flexGrow: 1, padding: '64px 24px 24px' }}>
+        {console.log('Layout: Rendering Outlet')}
         <Outlet />
       </main>
     </div>

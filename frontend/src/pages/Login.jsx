@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
 import { TextField, Button, Container, Typography, Box } from '@mui/material';
 
@@ -13,9 +13,9 @@ const Login = () => {
     e.preventDefault();
     try {
       await login(email, password);
-      navigate('/');
+      navigate('/dashboard');
     } catch (err) {
-      alert('Login failed');
+      alert(err.message || 'Login failed');
     }
   };
 
@@ -40,6 +40,11 @@ const Login = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
           <Button type="submit" variant="contained" color="primary" fullWidth>Login</Button>
+          <Box mt={2} textAlign="center">
+            <Typography variant="body2">
+              Don't have an account? <Link to="/register">Register here</Link>
+            </Typography>
+          </Box>
         </form>
       </Box>
     </Container>
