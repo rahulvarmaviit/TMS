@@ -35,6 +35,7 @@ export const AuthProvider = ({ children }) => {
       const decoded = jwtDecode(res.data.token);
       setUser(decoded);
       console.log('AuthContext: Login successful. User:', decoded);
+      return decoded; // Return user data for role-based redirection
     } catch (err) {
       console.error('AuthContext: Login failed:', err.response?.data || err.message);
       throw new Error(err.response?.data?.error || 'Login failed. Please check your credentials.');
@@ -52,6 +53,7 @@ export const AuthProvider = ({ children }) => {
       const decoded = jwtDecode(loginRes.data.token);
       setUser(decoded);
       console.log('AuthContext: Registration and login successful. User:', decoded);
+      return decoded; // Return user data for role-based redirection
     } catch (err) {
       console.error('AuthContext: Registration failed:', err);
       throw err;
