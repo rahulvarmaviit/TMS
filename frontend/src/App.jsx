@@ -5,10 +5,9 @@ import Admin from './pages/Admin';
 import AdminDashboard from './pages/AdminDashboard';
 import HRDashboard from './pages/HRDashboard';
 import ManagerDashboard from './pages/ManagerDashboard';
-import EmployeeDashboard from './pages/EmployeeDashboard';
+import Employee from './pages/Employee';
 import InternDashboard from './pages/InternDashboard';
 import HR from './pages/HR';
-import Employee from './pages/Employee';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import LandingPage from './pages/LandingPage';
@@ -26,7 +25,7 @@ function App() {
   <Route path="/admin/dashboard" element={<AdminDashboard />} />
   <Route path="/hr/dashboard" element={<HRDashboard />} />
   <Route path="/manager/dashboard" element={<ManagerDashboard />} />
-  <Route path="/employee/dashboard" element={<EmployeeDashboard />} />
+  <Route path="/employee/dashboard" element={<Employee />} />
   <Route path="/intern/dashboard" element={<InternDashboard />} />
         <Route element={<Layout />}>
           <Route element={<ProtectedRoute />}>
@@ -37,9 +36,6 @@ function App() {
           </Route>
           <Route element={<ProtectedRoute allowedRoles={["HR"]} />}>
             <Route path="/hr" element={<HR />} />
-          </Route>
-          <Route element={<ProtectedRoute allowedRoles={["Employee"]} />}>
-            <Route path="/employee" element={<Employee />} />
           </Route>
         </Route>
       </Routes>

@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
 import { getRoleBasedRoute } from '../utils/roleRedirect';
@@ -12,27 +12,50 @@ const Login = () => {
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
+  const [showRoleError, setShowRoleError] = useState(false);
+  const [roleErrorMsg, setRoleErrorMsg] = useState('');
+  const [isDisabled, setIsDisabled] = useState(false);
+
+  // Security: sanitize input
+  const sanitizeInput = (input) => input.trim();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (isDisabled) return; // prevent rapid submissions
+    setIsDisabled(true);
+    setTimeout(() => setIsDisabled(false), 3000); // 3-second cooldown
+
+    const sanitizedEmail = sanitizeInput(email);
+    const sanitizedPassword = sanitizeInput(password);
+
     try {
-      const user = await login(email, password);
-      // Normalize role for comparison
+      const user = await login(sanitizedEmail, sanitizedPassword);
+
+      // Normalize role
       let normalizedRole = role;
       if (normalizedRole.toLowerCase() === 'hr') {
         normalizedRole = 'HR';
       } else if (normalizedRole) {
         normalizedRole = normalizedRole.charAt(0).toUpperCase() + normalizedRole.slice(1).toLowerCase();
       }
+
       if (normalizedRole && user.role !== normalizedRole) {
         setShowRoleError(true);
         setRoleErrorMsg(`These are not ${normalizedRole} credentials. Please use the correct login for this role.`);
         return;
       }
+
+      // Security: store token securely (use httpOnly cookie in backend)
+      // Example placeholder: localStorage.setItem('token', encrypt(user.token));
+
       const redirectRoute = getRoleBasedRoute(user.role);
       navigate(redirectRoute);
+
     } catch (err) {
       setShowRoleError(true);
-      setRoleErrorMsg(err.message || 'Login failed');
+      // Security: generic error message
+      setRoleErrorMsg('Invalid credentials or role mismatch.');
     }
   };
 
@@ -49,10 +72,6 @@ const Login = () => {
 
   const roleStyles = getRoleStyles();
 
-  // Role error state for popout
-  const [showRoleError, setShowRoleError] = useState(false);
-  const [roleErrorMsg, setRoleErrorMsg] = useState('');
-
   return (
     <Container maxWidth="sm">
       <Box mt={8} mb={4}>
@@ -66,7 +85,6 @@ const Login = () => {
                 Logging in as {role.toUpperCase()}
               </Alert>
             )}
-            {/* Dashboard Button */}
             <Button
               variant="outlined"
               color="primary"
@@ -101,7 +119,11 @@ const Login = () => {
             }}>
               <span role="img" aria-label="error">❌</span>
               {roleErrorMsg}
-              <Button size="small" sx={{ ml: 2, bgcolor: 'white', color: 'error.main', fontWeight: 700 }} onClick={() => setShowRoleError(false)}>
+              <Button 
+                size="small" 
+                sx={{ ml: 2, bgcolor: 'white', color: 'error.main', fontWeight: 700 }} 
+                onClick={() => setShowRoleError(false)}
+              >
                 Close
               </Button>
             </Box>
@@ -133,6 +155,7 @@ const Login = () => {
               fullWidth 
               size="large"
               sx={{ mt: 2, mb: 2 }}
+              disabled={isDisabled}
             >
               Login
             </Button>
